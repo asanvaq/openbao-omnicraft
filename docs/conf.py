@@ -1,7 +1,4 @@
 import datetime
-import os
-
-import yaml
 
 # Configuration for the Sphinx documentation builder.
 # All configuration specific to your project should be done in this file.
@@ -71,7 +68,7 @@ copyright = "%s CC-BY-SA, %s" % (datetime.date.today().year, author)
 # NOTE: The Open Graph Protocol (OGP) enhances page display in a social graph
 #       and is used by social media platforms; see https://ogp.me/
 
-ogp_site_url = "https://canonical-openbao-charms.readthedocs-hosted.com/"
+ogp_site_url = "https://canonical.com/docs/openbao/"
 
 
 # Preview name of the documentation website
@@ -167,7 +164,7 @@ html_context = {
 # TODO: If your documentation is hosted on https://docs.ubuntu.com/,
 #       uncomment and update as needed.
 
-# slug = ''
+slug = "docs/openbao"
 
 #######################
 # Sitemap configuration: https://sphinx-sitemap.readthedocs.io/
@@ -175,16 +172,13 @@ html_context = {
 
 # Base URL of RTD hosted project
 
-html_baseurl = "https://canonical-openbao-charms.readthedocs-hosted.com/"
+html_baseurl = "https://canonical.com/docs/openbao/"
 
-# URL scheme. Add language and version scheme elements.
-# When configured with RTD variables, check for RTD environment so manual runs succeed:
+# URL scheme.
 
-if "READTHEDOCS_VERSION" in os.environ:
-    version = os.environ["READTHEDOCS_VERSION"]
-    sitemap_url_scheme = "{version}{link}"
-else:
-    sitemap_url_scheme = "MANUAL/{link}"
+sitemap_url_scheme = "{link}"
+
+sitemap_filename = "doc-sitemap.xml"
 
 # Include `lastmod` dates in the sitemap:
 
@@ -194,24 +188,24 @@ sitemap_show_lastmod = True
 # Template and asset locations
 #######################
 
-# html_static_path = ["_static"]
-# templates_path = ["_templates"]
+html_static_path = [".sphinx/_static"]
+templates_path = [".sphinx/_templates"]
 
 
 #############
 # Redirects #
 #############
 
-# To set up redirects: https://documatt.gitlab.io/sphinx-reredirects/usage.html
-# For example: 'explanation/old-name.html': '../how-to/prettify.html',
+# To set up redirects: https://github.com/wpilibsuite/sphinx-rerediraffe
 
 # To set up redirects in the Read the Docs project dashboard:
 # https://docs.readthedocs.io/en/stable/guides/redirects.html
 
-# NOTE: If undefined, set to None, or empty,
-#       the sphinx_reredirects extension will be disabled.
+# NOTE: Redirects are listed one per line in 'redirects.txt' as
+#       "source-path" "destination-path", both relative to the docs root.
 
-redirects = {}
+rediraffe_redirects = "redirects.txt"
+rediraffe_dir_only = True
 
 
 ###########################
@@ -274,30 +268,31 @@ extensions = [
     "sphinx_last_updated_by_git",
     "sphinx.ext.intersphinx",
     "sphinx_sitemap",
+    "sphinx_rerediraffe",
 ]
 
 # Excludes files or directories from processing
 
 exclude_patterns = [
     "doc-cheat-sheet*",
+    ".venv*",
+    "_build",
 ]
 
 # Adds custom CSS files, located under 'html_static_path'
 
-# html_css_files = []
+html_css_files = [
+    "https://assets.ubuntu.com/v1/d86746ef-cookie_banner.css",
+]
 
 
 # Adds custom JavaScript files, located under 'html_static_path'
 
-# html_js_files = []
+html_js_files = [
+    "js/overwrite_links.js",
+    "https://assets.ubuntu.com/v1/287a5e8f-bundle.js",
+]
 
-
-# Specifies a reST snippet to be appended to each .rst file
-
-rst_epilog = """
-.. include:: /reuse/links.txt
-.. include:: /reuse/substitutions.txt
-"""
 
 # Feedback button at the top; enabled by default
 #
@@ -338,12 +333,6 @@ rst_prolog = """
 
 if "discourse_prefix" not in html_context and "discourse" in html_context:
     html_context["discourse_prefix"] = html_context["discourse"] + "/t/"
-
-# Workaround for substitutions.yaml
-
-if os.path.exists("./reuse/substitutions.yaml"):
-    with open("./reuse/substitutions.yaml", "r") as fd:
-        myst_substitutions = yaml.safe_load(fd.read())
 
 # Add configuration for intersphinx mapping
 
